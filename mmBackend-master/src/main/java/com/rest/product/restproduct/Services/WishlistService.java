@@ -21,7 +21,7 @@ public class WishlistService {
         List<Wishlist> list =(List<Wishlist>)this.wishlistRepository.findAll();
         return list;
     }
-    public Wishlist getProductById(int id){
+    public Wishlist getProductById(long id){
         Wishlist product=null;
         // product = list.stream().filter(e->e.getArtistId()==id).findFirst().get();
         product = this.wishlistRepository.findById(id).orElse(null);
@@ -34,7 +34,7 @@ public class WishlistService {
         return product;
         
     }
-    public void deleteProduct(int id) {
+    public void deleteProduct(long id) {
         wishlistRepository.deleteById(id);
         
     }

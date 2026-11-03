@@ -1,3 +1,4 @@
+import { BASE_URL } from "../services/helper";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import Comment from "./CommentForm"; 
@@ -17,14 +18,14 @@ function PostDetail() {
   }, [id]);
 
   const fetchPost = () => {
-    fetch(`http://localhost:8080/api/posts/${id}`)
+    fetch(`${BASE_URL}/api/posts/${id}`)
       .then((response) => response.json())
       .then((data) => setPost(data))
       .catch((error) => console.error("Error fetching post:", error));
   };
 
   const fetchComments = () => {
-    fetch(`http://localhost:8080/api/comments/${id}`)
+    fetch(`${BASE_URL}/api/comments/${id}`)
       .then((response) => response.json())
       .then((data) => setComments(data))
       .catch((error) => console.error("Error fetching comments:", error));
@@ -47,7 +48,7 @@ function PostDetail() {
       content: newComment,
     });
 
-    fetch(`http://localhost:8080/api/comments/create?${params.toString()}`, {
+    fetch(`${BASE_URL}/api/comments/create?${params.toString()}`, {
       method: "POST",
     })
       .then((response) => {
@@ -67,7 +68,7 @@ function PostDetail() {
   };
 
   const handleLike = () => {
-    fetch(`http://localhost:8080/api/posts/${id}/like`, {
+    fetch(`${BASE_URL}/api/posts/${id}/like`, {
       method: "PUT",
     })
       .then((response) => {
@@ -105,7 +106,7 @@ function PostDetail() {
           Like : {post.likeCount} <button onClick={handleLike}>❤️</button>
         </p>
         <p>View : {post.viewCount} 👁️‍🗨️</p>
-        <p>Tags : {post.tags.join(", ")}</p>
+        <p>Tags : {(post.tags || []).join(", ")}</p>
       </div>
 
       <div className="comments">
@@ -126,15 +127,19 @@ function PostDetail() {
             value={newComment}
             onChange={handleCommentChange}
             placeholder="Write your comment here..."
+            aria-label="Your comment"
+            required
           />
           <br />
           <br />
-          {/* <input
+          <input
             type="text"
             value={postedBy}
             onChange={handlePostedByChange}
             placeholder="Your name"
-          /> */}
+            required
+            aria-label="Your name"
+          />
           <br />
           <br />
           <button type="submit">Add Comment</button>

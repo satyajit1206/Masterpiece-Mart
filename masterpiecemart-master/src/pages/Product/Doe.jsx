@@ -1,3 +1,4 @@
+import { BASE_URL } from "../../services/helper";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { toast } from 'react-toastify';
@@ -34,7 +35,7 @@ function ProductPage(props) {
   useEffect(() => {
     
     const productId = prod_list.productId; 
-    fetch(`http://localhost:8080/api/products/${productId}`)
+    fetch(`${BASE_URL}/api/products/${productId}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');

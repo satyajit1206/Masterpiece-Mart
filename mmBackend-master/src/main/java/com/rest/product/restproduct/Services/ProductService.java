@@ -29,7 +29,7 @@ public class ProductService {
         List<Product> list =(List<Product>)this.productRepository.findAll();
         return list;
     }
-    public Product getProductById(int id){
+    public Product getProductById(long id){
         Product product=null;
         // product = list.stream().filter(e->e.getArtistId()==id).findFirst().get();
         product = this.productRepository.findById(id).orElse(null);
@@ -42,25 +42,25 @@ public class ProductService {
         return product;
         
     }
-    public void deleteProduct(int id) {
+    public void deleteProduct(long id) {
         productRepository.deleteById(id);
     }
 
-    public Product updateProduct(int id, Product updatedProduct) {
+    public Product updateProduct(long id, Product updatedProduct) {
         Optional<Product> optionalProduct = productRepository.findById(id);
 
         
             // Product exists, update its data
-            Product existingProduct = optionalProduct.get();
+            Product existingProduct = optionalProduct.orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Cart item not found"));
             existingProduct.setProductName(updatedProduct.getProductName());
             // existingProduct.setDescription(updatedProduct.getDescription());
             existingProduct.setPrice(updatedProduct.getPrice());
             existingProduct.setQuantity(updatedProduct.getQuantity());
             existingProduct.setArtistId(updatedProduct.getArtistId());
             existingProduct.setArtistName(updatedProduct.getArtistName());
-            existingProduct.setProductId(updatedProduct.getProductId());
+            // The URL identifies the row; do not change its primary key.
             // existingProduct.setProductImage(updatedProduct.getProductImage());
-            existingProduct.setProductDescription(null);
+            existingProduct.setProductDescription(updatedProduct.getProductDescription());
 
             // Save the updated product
             return productRepository.save(existingProduct);

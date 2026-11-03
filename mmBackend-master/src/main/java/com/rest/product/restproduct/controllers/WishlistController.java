@@ -26,17 +26,14 @@ public class WishlistController {
     private WishlistService wishlistService;
 
     @GetMapping  
-    @CrossOrigin("**")
+
     public ResponseEntity<List<Wishlist>> getProducts() {
         List<Wishlist> list = wishlistService.getAllProducts();
-        if(list.size()<=0){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
         return ResponseEntity.of(Optional.of(list));
     }
     // get single book
     @GetMapping("/{id}")
-    public ResponseEntity<Wishlist> getProduct(@PathVariable("id") int id){
+    public ResponseEntity<Wishlist> getProduct(@PathVariable("id") long id){
         Wishlist product = wishlistService.getProductById(id);
         if(product==null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -60,7 +57,7 @@ public class WishlistController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Wishlist> deleteProduct(@PathVariable("id") int id){
+    public ResponseEntity<Wishlist> deleteProduct(@PathVariable("id") long id){
         try {
             this.wishlistService.deleteProduct(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

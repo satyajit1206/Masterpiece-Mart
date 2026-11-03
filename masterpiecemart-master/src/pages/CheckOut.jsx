@@ -1,3 +1,4 @@
+import { BASE_URL } from "../services/helper";
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -12,7 +13,7 @@ function Cart() {
   const [delStatus,setDelStatus] = useState(<span className="text-red-500">Free Delivery For Cart Value Above 1000</span>);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/products")
+    fetch(`${BASE_URL}/api/products`)
       .then((response) => {
         if (!response.ok && response.status !== 404) {
           throw new Error(
@@ -76,7 +77,7 @@ function Cart() {
     
     try {
       // Make an API call to update the product in the database
-      const response = await fetch(`http://localhost:8080/api/products/${productId}`, {
+      const response = await fetch(`${BASE_URL}/api/products/${productId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -129,7 +130,7 @@ function Cart() {
   
     try {
       // Make an API call to update the product in the database
-      const response = await fetch(`http://localhost:8080/api/products/${productId}`, {
+      const response = await fetch(`${BASE_URL}/api/products/${productId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -172,7 +173,7 @@ if(delivery>1000){
     // if (productToDelete && productToDelete.quantity === 0) {
       try {
         // Make an API call to delete the product from the database
-        const response = await fetch(`http://localhost:8080/api/products/${productId}`, {
+        const response = await fetch(`${BASE_URL}/api/products/${productId}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

@@ -60,7 +60,7 @@ public class AllProducts {
     public void setArtistId(int artist_id) {
         this.artist_id = artist_id;
     }
-    public long getProductId() {
+    public Long getProductId() {
         return product_id;
     }
     public void setProductId(long product_id){
@@ -93,18 +93,21 @@ public class AllProducts {
     public void setData0(byte[] product_image) {
         this.product_image = product_image;
     }
+    @com.fasterxml.jackson.annotation.JsonIgnore
     public byte[] getData0(){
         return this.product_image;
     }
     public void setData1(byte[] product_image) {
         this.sub_image1 = product_image;
     }
+    @com.fasterxml.jackson.annotation.JsonIgnore
     public byte[] getData1(){
         return this.sub_image1;
     }
     public void setData2(byte[] product_image) {
         this.sub_image2 = product_image;
     }
+    @com.fasterxml.jackson.annotation.JsonIgnore
     public byte[] getData2(){
         return this.sub_image2;
     }
@@ -119,7 +122,7 @@ public class AllProducts {
         return imageName;
     }
     public void setImageName(String imageName) {
-        this.imageName = product_name;
+        this.imageName = imageName;
     }
     public String getSubImageName1() {
         return subImageName1;

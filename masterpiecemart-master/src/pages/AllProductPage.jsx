@@ -1,72 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
-import { Await, Link } from 'react-router-dom';
 import Footer from '../components/Footer';
-
-function ProductGrid() {
-  const [products, setProducts] = useState([]);
-
-  useEffect(() => {
-    fetchProducts(); // Fetch products data when component mounts
-  }, []);
-
-  const fetchProducts = async () => {
-    try {
-      const response = await fetch('http://localhost:8080/api/allproducts'); // Replace with your backend endpoint
-      if (!response.ok) {
-        throw new Error('Failed to fetch products');
-      }
-      const data = await response.json();
-      
-      setProducts(data);
-      if(data){
-        console.log(data)
-      }
-      // await console.log(products) // Update state with fetched products
-    } catch (error) {
-      console.error(error);
-      // Handle error fetching products
-    }
-  };
-
-  
-
-  const [hoveredProductId, setHoveredProductId] = useState(null);
-
-  const handleMouseEnter = productId => {
-    setHoveredProductId(productId);
-  };
-
-  const handleMouseLeave = () => {
-    setHoveredProductId(null);
-  };
-
-  return (
-    <>
-    <Navbar />
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4 bg-orange-50 mb-40">
-      {products.map(product => (
-        <Link key={product.productId} className={`p-4 bg-gray-100 border-2 border-gray-200 hover:no-underline  text-black rounded-lg transition duration-300 ${
-          hoveredProductId === product.productId ? 'shadow-xl' : 'shadow-md'
-        }`}
-        onMouseEnter={() => handleMouseEnter(product.productId)}
-        onMouseLeave={handleMouseLeave} to={`/${product.productName}`}>
-          <div className='flex flex-col items-center'>
-          <img className='w-80 h-60' src={`http://localhost:8080/api/allproducts/image0/${product.imageName}`} alt={product.productName} />
-          <div className='flex flex-col items-center mt-4 text-lg' >
-          <h2 className="text-xl font-semibold">{product.productName}</h2>
-          <p className="text-gray-600">{product.artistName}</p>
-          <p className="text-gray-900 font-semibold">Rs. {product.price}</p>
-          </div>
-          
-          </div>
-          
-        </Link>
-      ))}
-    </div>
-    <Footer />
-    </>
-  );
+import { api, imageUrl, money } from '../services/api';
+export default function Collection(){
+ const [products,setProducts]=useState([]),[query,setQuery]=useState(''),[error,setError]=useState(''),[loading,setLoading]=useState(true);
+ useEffect(()=>{api('/api/allproducts').then(setProducts).catch(e=>setError(e.message)).finally(()=>setLoading(false));},[]);
+ const filtered=products.filter(p=>`${p.productName} ${p.artistName}`.toLowerCase().includes(query.toLowerCase()));
+ return <><Navbar/><main className="mart-shell"><div className="mart-page-heading"><p className="mart-eyebrow">THE COLLECTION</p><h1>A piece for every perspective.</h1><p>Discover artwork, meet its creator, and make room for something beautiful.</p></div><div className="mart-toolbar"><span>{filtered.length} artworks</span><input aria-label="Search artwork or artist" placeholder="Search artwork or artist…" value={query} onChange={e=>setQuery(e.target.value)}/></div>{loading&&<p role="status">Loading the collection…</p>}{error&&<p className="mart-error" role="alert">{error}</p>}<div className="mart-grid">{filtered.map(p=><Link className="mart-card" key={p.productId} to={`/artwork/${p.productId}`}><div><img src={imageUrl(p.imageName)} alt={p.productName}/></div><small>{p.artistName}</small><h2>{p.productName}</h2><p>{money(p.price)} <span>View artwork ↗</span></p></Link>)}</div>{!loading&&!error&&!filtered.length&&<p className="mart-empty">No artwork found. Try another search or add the first piece.</p>}</main><Footer/></>;
 }
-
-export default ProductGrid;

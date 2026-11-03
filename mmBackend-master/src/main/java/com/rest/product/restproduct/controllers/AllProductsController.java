@@ -30,7 +30,7 @@ public class AllProductsController {
     private AllProductsService allProductsService;
 
     @GetMapping("/image0/{imageName}")
-    @CrossOrigin("**")
+
     public ResponseEntity<?> download0(@PathVariable String imageName) {
         byte[] image = allProductsService.getImageByName0(imageName);
         return ResponseEntity.status(HttpStatus.OK)
@@ -38,7 +38,7 @@ public class AllProductsController {
                 .body(image);
     }
     @GetMapping("/image1/{imageName}")
-    @CrossOrigin("**")
+
     public ResponseEntity<?> download1(@PathVariable String imageName) {
         byte[] image = allProductsService.getImageByName1(imageName);
         return ResponseEntity.status(HttpStatus.OK)
@@ -46,7 +46,7 @@ public class AllProductsController {
                 .body(image);
     }
     @GetMapping("/image2/{imageName}")
-    @CrossOrigin("**")
+
     public ResponseEntity<?> download2(@PathVariable String imageName) {
         byte[] image = allProductsService.getImageByName2(imageName);
         return ResponseEntity.status(HttpStatus.OK)
@@ -56,17 +56,14 @@ public class AllProductsController {
     
     
     @GetMapping  
-    @CrossOrigin("**")
+
     public ResponseEntity<List<AllProducts>> getProducts() {
         List<AllProducts> list = allProductsService.getAllProducts();
-        if(list.size()<=0){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
         return ResponseEntity.of(Optional.of(list));
     }
     
      @GetMapping("/{id}")
-    public ResponseEntity<AllProducts> getProduct(@PathVariable("id") int id){
+    public ResponseEntity<AllProducts> getProduct(@PathVariable("id") long id){
         AllProducts product = allProductsService.getProductById(id);
         if(product==null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -99,6 +96,8 @@ public ResponseEntity<String> uploadProductWithImages(
        allProductsService.addProduct(product, image1, image2, image3);
         
         return new ResponseEntity<>("Product and images uploaded successfully", HttpStatus.OK);
+    } catch (IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
     } catch (Exception e) {
         return new ResponseEntity<>("Failed to upload product and images: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }

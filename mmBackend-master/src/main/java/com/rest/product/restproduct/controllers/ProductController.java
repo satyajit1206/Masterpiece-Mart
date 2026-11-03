@@ -31,17 +31,14 @@ public class ProductController {
     private ProductService productService;
 
     @GetMapping  
-    @CrossOrigin("**")
+
     public ResponseEntity<List<Product>> getProducts() {
         List<Product> list = productService.getAllProducts();
-        if(list.size()<=0){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
         return ResponseEntity.of(Optional.of(list));
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProduct(@PathVariable("id") int id){
+    public ResponseEntity<Product> getProduct(@PathVariable("id") long id){
         Product product = productService.getProductById(id);
         if(product==null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -58,7 +55,9 @@ public class ProductController {
             System.out.println(product);
             Product b = this.productService.addProduct(product);
             System.out.println(product);
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            return ResponseEntity.status(HttpStatus.CREATED).body(b);
+        } catch (org.springframework.web.server.ResponseStatusException e) {
+            throw e;
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -77,10 +76,12 @@ public class ProductController {
     //     }
     // }
     @DeleteMapping("/{id}")
-    public ResponseEntity<Product> deleteProduct(@PathVariable("id") int id){
+    public ResponseEntity<Product> deleteProduct(@PathVariable("id") long id){
         try {
             this.productService.deleteProduct(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (org.springframework.web.server.ResponseStatusException e) {
+            throw e;
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -88,10 +89,12 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable("id") int id, @RequestBody Product product){
+    public ResponseEntity<Product> updateProduct(@PathVariable("id") long id, @RequestBody Product product){
         try {
             this.productService.updateProduct(id, product);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (org.springframework.web.server.ResponseStatusException e) {
+            throw e;
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

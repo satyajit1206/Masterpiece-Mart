@@ -1,3 +1,4 @@
+import { BASE_URL } from "../services/helper";
 import React, { useState, useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -17,7 +18,7 @@ function Cart() {
   const [delStatus,setDelStatus] = useState(<span className="text-red-500">Free Delivery For Order Value Above 1000</span>);
 
   useEffect(() => {
-    fetch("http://localhost:8080/api/products")
+    fetch(`${BASE_URL}/api/products`)
       .then((response) => {
         if (!response.ok && response.status !== 404) {
           throw new Error(
@@ -65,7 +66,7 @@ const delivery =state.price>1000?0:70;
     // if (productToDelete && productToDelete.quantity === 0) {
       try {
         // Make an API call to delete the product from the database
-        const response = await fetch(`http://localhost:8080/api/products/${productId}`, {
+        const response = await fetch(`${BASE_URL}/api/products/${productId}`, {
           method: 'DELETE',
           headers: {
             'Content-Type': 'application/json',

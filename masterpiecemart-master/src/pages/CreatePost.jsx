@@ -1,3 +1,4 @@
+import { BASE_URL } from "../services/helper";
 import React, { useState } from 'react';
 import axios from 'axios';
 // import '../Style/CreatePost.css';
@@ -22,7 +23,7 @@ const CreatePost = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:8080/api/posts', formData);
+      await axios.post(`${BASE_URL}/api/posts`, formData);
       window.location.href = '/Blog';
     } catch (error) {
       console.error('Error creating post:', error);

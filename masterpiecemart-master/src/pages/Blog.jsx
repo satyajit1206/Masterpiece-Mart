@@ -1,3 +1,4 @@
+import { BASE_URL } from "../services/helper";
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
@@ -10,7 +11,7 @@ function Blog() {
     const fetchPosts = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/api/posts${searchQuery ? `/search/${searchQuery}` : ""}`
+          `${BASE_URL}/api/posts${searchQuery ? `/search/${encodeURIComponent(searchQuery)}` : ""}`
         );
   
         const textResponse = await response.text();
@@ -86,7 +87,7 @@ function Blog() {
                   <p className="text-gray-600 mb-2">Likes: {post.likeCount}</p>
                   <p className="text-gray-600 mb-2">Views: {post.viewCount}</p>
                   <div className="text-sm text-gray-600">
-                    Tags: {post.tags.join(", ")}
+                    Tags: {(post.tags || []).join(", ")}
                   </div>
                 </div>
               </div>

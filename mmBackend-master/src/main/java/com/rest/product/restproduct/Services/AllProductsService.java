@@ -22,7 +22,7 @@ public class AllProductsService {
         List<AllProducts> list =(List<AllProducts>)this.allProductsRepository.findAll();
         return list;
     }
-    public AllProducts getProductById(int id){
+    public AllProducts getProductById(long id){
         AllProducts product=null;
         // product = list.stream().filter(e->e.getArtistId()==id).findFirst().get();
         product = this.allProductsRepository.findById(id).orElse(null);
@@ -32,8 +32,19 @@ public class AllProductsService {
 
     public AllProducts addProduct(AllProducts b, MultipartFile image0, MultipartFile image1, MultipartFile image2) throws Exception{
         
-        AllProducts  savedProduct = new AllProducts();
-        savedProduct.setProductId(b.getProductId());
+        if (b.getProductName() == null || b.getProductName().isBlank() || b.getArtistName() == null || b.getArtistName().isBlank() || !Float.isFinite(b.getPrice()) || b.getPrice() <= 0) {
+            throw new IllegalArgumentException("Product name, artist and a positive price are required");
+        }
+        if (allProductsRepository.findByImageName(b.getProductName()).isPresent()) {
+            throw new IllegalArgumentException("An artwork with that name already exists");
+        }
+        for (MultipartFile image : new MultipartFile[]{image0, image1, image2}) {
+            if (image.isEmpty() || !"image/jpeg".equals(image.getContentType()) || javax.imageio.ImageIO.read(image.getInputStream()) == null) {
+                throw new IllegalArgumentException("Please upload three valid JPEG images");
+            }
+        }
+        AllProducts savedProduct = new AllProducts();
+
         savedProduct.setProductName(b.getProductName());
         savedProduct.setPrice(b.getPrice());
         // savedProduct.setQuantity(b.getQuantity());
@@ -57,21 +68,21 @@ public class AllProductsService {
 
     public byte[] getImageByName0(String imageName){
         Optional<AllProducts> dbImageData = allProductsRepository.findByImageName(imageName);
-        byte[] images= ImageUtils.decompressImage(dbImageData.get().getData0());
+        byte[] images= ImageUtils.decompressImage(dbImageData.orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Image not found")).getData0());
         return images;
 
 
     }
     public byte[] getImageByName1(String imageName){
         Optional<AllProducts> dbImageData = allProductsRepository.findBySubImageName1(imageName);
-        byte[] images= ImageUtils.decompressImage(dbImageData.get().getData1());
+        byte[] images= ImageUtils.decompressImage(dbImageData.orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Image not found")).getData1());
         return images;
 
 
     }
     public byte[] getImageByName2(String imageName){
         Optional<AllProducts> dbImageData = allProductsRepository.findBySubImageName2(imageName);
-        byte[] images= ImageUtils.decompressImage(dbImageData.get().getData2());
+        byte[] images= ImageUtils.decompressImage(dbImageData.orElseThrow(() -> new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, "Image not found")).getData2());
         return images;
 
 

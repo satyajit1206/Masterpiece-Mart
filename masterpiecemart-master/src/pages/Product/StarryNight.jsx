@@ -1,3 +1,4 @@
+import { BASE_URL } from "../../services/helper";
 import React, { useState, useEffect } from "react";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,7 +24,7 @@ function ProductPage(props) {
     const productId = props.productId;
     console.log(productId);
 
-    fetch(`http://localhost:8080/api/products/${productId}`)
+    fetch(`${BASE_URL}/api/products/${productId}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -41,7 +42,7 @@ function ProductPage(props) {
         console.error('There has been a problem with your fetch operation:', error);
       });
 
-    fetch(`http://localhost:8080/api/wishlist/${productId}`)
+    fetch(`${BASE_URL}/api/wishlist/${productId}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -140,21 +141,21 @@ function ProductPage(props) {
                 <div className="carousel-item active">
                   <img
                     className="w-full h-full object-cover"
-                    src={`http://localhost:8080/api/allproducts/image0/${props.productName}`}
+                    src={`${BASE_URL}/api/allproducts/image0/${props.productName}`}
                     alt="img"
                   />
                 </div>
                 <div className="carousel-item">
                   <img
                     className="w-full h-full object-cover"
-                    src={`http://localhost:8080/api/allproducts/image1/${props.productName + '1'}`}
+                    src={`${BASE_URL}/api/allproducts/image1/${props.productName + '1'}`}
                     alt="img"
                   />
                 </div>
                 <div className="carousel-item">
                   <img
                     className="w-full h-full object-cover"
-                    src={`http://localhost:8080/api/allproducts/image2/${props.productName + '2'}`}
+                    src={`${BASE_URL}/api/allproducts/image2/${props.productName + '2'}`}
                     alt="img"
                   />
                 </div>

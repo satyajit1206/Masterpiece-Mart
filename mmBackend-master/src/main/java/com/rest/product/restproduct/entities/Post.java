@@ -29,5 +29,6 @@ public class Post {
 
     private int viewCount;
 
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> tags;
 }
