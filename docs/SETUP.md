@@ -39,3 +39,8 @@ Restart the frontend after changing this value.
 - Artwork uploads accept three JPEG files, up to 10 MB each.
 
 The startup scripts support macOS/Linux. Maven is provided through the wrapper; dependencies require internet access on the first run. Stop each server with Ctrl+C.
+
+### Restored frontend pages
+FAQ, About, Contact, Login, Sign Up and checkout previews are available from the navigation/footer and shopping flow. Artwork pages show three selectable images. Checkout displays ₹70 delivery up to ₹1,000 and free delivery above ₹1,000; it does not submit orders, collect payment, or persist address details.
+
+The optional account and contact forms require separate services, which are not included in this backend. Set `VITE_AUTH_BASE_URL` (signin/signup under `/api/auth`) and `VITE_CONTACT_URL` (full message POST endpoint) in the frontend environment and restart Vite to enable them. Accounts do not make the shared cart or wishlist private.
